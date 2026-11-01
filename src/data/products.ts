@@ -22,10 +22,6 @@ export const products = raw as unknown as Product[];
 
 export const productById = new Map(products.map((product) => [product.id, product]));
 
-export const brands = [...new Set(products.map((product) => product.brand))].sort((a, b) =>
-  a.localeCompare(b),
-);
-
 export const categoryCounts = products.reduce<Record<string, number>>((counts, product) => {
   counts[product.category] = (counts[product.category] ?? 0) + 1;
   return counts;
