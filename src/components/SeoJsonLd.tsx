@@ -20,7 +20,9 @@ export function SeoJsonLd() {
             '@type': 'Offer',
             priceCurrency: 'INR',
             price: product.price,
-            availability: 'https://schema.org/InStock',
+            availability: product.outOfStock
+              ? 'https://schema.org/OutOfStock'
+              : 'https://schema.org/InStock',
           },
         },
       })),

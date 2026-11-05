@@ -99,7 +99,12 @@ export function QuickView({
                   <span className="font-display text-3xl text-gold">
                     {product.price === null ? product.priceLabel : formatINR(product.price)}
                   </span>
-                  {product.price === null && (
+                  {product.outOfStock && (
+                    <span className="rounded-full bg-red-500/20 px-2.5 py-0.5 text-xs font-semibold text-red-300">
+                      Out of stock
+                    </span>
+                  )}
+                  {product.price === null && !product.outOfStock && (
                     <span className="text-xs text-cream/45">final price confirmed on WhatsApp</span>
                   )}
                 </div>
@@ -122,20 +127,28 @@ export function QuickView({
                   </div>
                 ) : null}
 
-                <div className="flex items-center justify-between gap-3 rounded-xl border border-gold/12 bg-midnight/40 px-3 py-2.5">
-                  <span className="text-xs text-cream/55">Quantity</span>
-                  <QuantityStepper
-                    qty={qty}
-                    onDecrement={() => setQty((value) => Math.max(1, value - 1))}
-                    onIncrement={() => setQty((value) => Math.min(99, value + 1))}
-                  />
-                </div>
+                {!product.outOfStock && (
+                  <div className="flex items-center justify-between gap-3 rounded-xl border border-gold/12 bg-midnight/40 px-3 py-2.5">
+                    <span className="text-xs text-cream/55">Quantity</span>
+                    <QuantityStepper
+                      qty={qty}
+                      onDecrement={() => setQty((value) => Math.max(1, value - 1))}
+                      onIncrement={() => setQty((value) => Math.min(99, value + 1))}
+                    />
+                  </div>
+                )}
 
                 <div className="mt-auto flex flex-col gap-2">
-                  <button type="button" onClick={handleAdd} className="btn btn-gold w-full">
-                    <Plus size={16} /> Add to cart
-                    {product.price !== null && qty > 1 ? ` · ${formatINR(product.price * qty)}` : ''}
-                  </button>
+                  {product.outOfStock ? (
+                    <div className="rounded-xl border border-red-500/25 bg-red-500/10 py-3 text-center text-xs font-semibold text-red-300">
+                      Currently out of stock
+                    </div>
+                  ) : (
+                    <button type="button" onClick={handleAdd} className="btn btn-gold w-full">
+                      <Plus size={16} /> Add to cart
+                      {product.price !== null && qty > 1 ? ` · ${formatINR(product.price * qty)}` : ''}
+                    </button>
+                  )}
                   <a href={askHref} target="_blank" rel="noreferrer" className="btn btn-ghost w-full">
                     <MessageCircle size={16} /> Ask about this item
                   </a>

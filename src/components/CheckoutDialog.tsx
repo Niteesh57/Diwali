@@ -41,7 +41,6 @@ function validate(customer: Customer): Errors {
     errors.altPhone = 'Enter a valid 10-digit number or leave blank';
   }
   if (!customer.city.trim()) errors.city = 'Enter your city or delivery area';
-  if (customer.address.trim().length < 10) errors.address = 'Enter your full delivery address';
   if (!/^\d{6}$/.test(customer.pincode.trim())) errors.pincode = 'Enter a 6-digit pincode';
   if (customer.deliveryDate && customer.deliveryDate < today()) {
     errors.deliveryDate = 'Choose today or a later date';
@@ -269,12 +268,12 @@ export function CheckoutDialog({
                     </label>
 
                     <label className="sm:col-span-2">
-                      <span className="mb-1 block text-[11px] text-cream/55">Full delivery address *</span>
+                      <span className="mb-1 block text-[11px] text-cream/55">Full delivery address (optional)</span>
                       <textarea
                         value={customer.address}
                         onChange={update('address')}
                         className={`${fieldClass('address')} min-h-[76px] resize-y`}
-                        placeholder="House number, street, landmark"
+                        placeholder="House number, street, landmark (optional)"
                         autoComplete="street-address"
                       />
                       {errors.address && <span className="mt-1 block text-[11px] text-red-300">{errors.address}</span>}

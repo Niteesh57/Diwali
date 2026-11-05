@@ -16,6 +16,7 @@ export type Product = {
   designs?: string[];
   aliases?: string[];
   isNew2026?: boolean;
+  outOfStock?: boolean;
 };
 
 export const products = raw as unknown as Product[];

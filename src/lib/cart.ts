@@ -30,6 +30,8 @@ export const useCart = create<CartState>()(
       lines: [],
       add: (productId, design, qty = 1) =>
         set((state) => {
+          const product = productById.get(productId);
+          if (product?.outOfStock) return state;
           const key = lineKey(productId, design);
           const existing = state.lines.find((line) => line.key === key);
           if (existing) {
@@ -43,9 +45,11 @@ export const useCart = create<CartState>()(
         }),
       setQty: (key, qty) =>
         set((state) => ({
-          lines: state.lines.map((line) =>
-            line.key === key ? { ...line, qty: clampQty(qty) } : line,
-          ),
+          lines: state.lines
+            .map((line) =>
+              line.key === key ? { ...line, qty: Math.min(99, Math.floor(qty)) } : line,
+            )
+            .filter((line) => line.qty > 0),
         })),
       increment: (key) =>
         set((state) => ({
@@ -57,7 +61,7 @@ export const useCart = create<CartState>()(
         set((state) => ({
           lines: state.lines
             .map((line) =>
-              line.key === key ? { ...line, qty: clampQty(line.qty - 1) } : line,
+              line.key === key ? { ...line, qty: line.qty - 1 } : line,
             )
             .filter((line) => line.qty > 0),
         })),

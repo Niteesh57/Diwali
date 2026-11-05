@@ -48,14 +48,21 @@ export function ProductRow({
         </p>
         <p className="mt-0.5 text-sm font-bold text-[#a30d2d]">
           {product.price === null ? product.priceLabel : formatINR(product.price)}
-          {product.price === null && (
+          {product.outOfStock && (
+            <span className="ml-1.5 text-[10px] font-semibold text-[#c0392b]">Out of stock</span>
+          )}
+          {product.price === null && !product.outOfStock && (
             <span className="ml-1 text-[10px] font-normal text-[#93795f]">on request</span>
           )}
         </p>
       </div>
 
       <div className="shrink-0">
-        {product.designs?.length ? (
+        {product.outOfStock ? (
+          <span className="rounded-full bg-[#f3ece2] px-2.5 py-1 text-[11px] font-semibold text-[#8b7662]">
+            Out of stock
+          </span>
+        ) : product.designs?.length ? (
           <button
             type="button"
             onClick={() => onOpen(product)}
