@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MessageCircle, Plus, X } from 'lucide-react';
+import { brandLogos } from '../data/brandLogos';
 import type { Product } from '../data/products';
 import { categoryLabel } from '../data/categories';
 import { site } from '../data/site';
@@ -81,13 +82,32 @@ export function QuickView({
             </button>
 
             <div className="grid gap-0 sm:grid-cols-[1.05fr_1fr]">
-              <ProductArt product={product} className="aspect-[5/4] w-full sm:aspect-auto sm:h-full sm:min-h-[320px]" />
+              {brandLogos[product.brand] ? (
+                <div className="flex aspect-[5/4] w-full items-center justify-center bg-white p-6 sm:aspect-auto sm:h-full sm:min-h-[320px]">
+                  <img
+                    src={brandLogos[product.brand]}
+                    alt={`${product.brand} logo`}
+                    className="max-h-56 max-w-full object-contain"
+                  />
+                </div>
+              ) : (
+                <ProductArt product={product} className="aspect-[5/4] w-full sm:aspect-auto sm:h-full sm:min-h-[320px]" />
+              )}
 
               <div className="flex flex-col gap-4 p-5 sm:p-6">
                 <div>
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-gold/70">
-                    {product.brand} · #{product.sno}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    {brandLogos[product.brand] && (
+                      <img
+                        src={brandLogos[product.brand]}
+                        alt={product.brand}
+                        className="h-5 w-auto max-w-[70px] rounded bg-white p-0.5 object-contain"
+                      />
+                    )}
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-gold/70">
+                      {product.brand} · #{product.sno}
+                    </p>
+                  </div>
                   <h2 className="mt-1 font-display text-2xl leading-tight text-cream">{product.name}</h2>
                   <p className="mt-1 text-xs text-cream/45">
                     {categoryLabel(product.category)}

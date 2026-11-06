@@ -28,7 +28,7 @@ export const emptyCustomer: Customer = {
 export function buildOrderMessage(customer: Customer, lines: CartLine[]) {
   const items = lines.map((line, index) => {
     const product = productById.get(line.productId);
-    const name = product?.name ?? line.productId;
+    const name = line.customName ? `${line.customName} [Custom Item]` : (product?.name ?? line.productId);
     const design = line.design ? ` (${line.design})` : '';
     const total = lineTotal(line);
     const price = total === null ? 'price to be confirmed' : formatINR(total);

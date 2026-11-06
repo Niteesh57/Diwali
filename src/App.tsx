@@ -81,7 +81,7 @@ export default function App() {
           </div>
 
           <div className="mx-auto mt-5 max-w-5xl px-4 sm:px-6">
-            <ProductGrid products={filtered} onOpen={setQuickView} />
+            <ProductGrid products={filtered} onOpen={setQuickView} selectedCategory={category} />
           </div>
         </section>
 

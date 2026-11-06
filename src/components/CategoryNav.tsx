@@ -47,11 +47,14 @@ export function CategoryNav({
           className="rounded-lg border border-[#e2d2bb] bg-white px-3 py-2 text-sm text-[#2b1420] focus:outline-none"
         >
           <option value="all">All categories</option>
-          {categories.map((item) => (
-            <option key={item.key} value={item.key}>
-              {item.label} ({categoryCounts[item.key] ?? 0})
-            </option>
-          ))}
+          {categories.map((item) => {
+            const count = item.key === 'custom' ? 'Add' : (categoryCounts[item.key] ?? 0);
+            return (
+              <option key={item.key} value={item.key}>
+                {item.label} ({count})
+              </option>
+            );
+          })}
         </select>
 
         <span className="text-[11px] text-[#93795f] sm:min-w-16 sm:text-right">{resultCount} items</span>

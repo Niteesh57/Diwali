@@ -23,6 +23,7 @@ const categories = new Set([
   'vanitha',
   'toy-guns',
   'exclusive',
+  'custom',
 ]);
 
 const errors = [];

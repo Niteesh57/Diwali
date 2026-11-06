@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ShoppingBag, Trash2, X } from 'lucide-react';
+import { ArrowRight, ShoppingBag, Sparkles, Trash2, X } from 'lucide-react';
+import { brandLogos } from '../data/brandLogos';
 import { productById } from '../data/products';
 import { cartSummary, lineTotal, useCart } from '../lib/cart';
 import { formatINR } from '../lib/format';
@@ -80,24 +81,42 @@ export function CartDrawer({
                 <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
                   {lines.map((line) => {
                     const product = productById.get(line.productId);
-                    if (!product) return null;
+                    if (!product && !line.customName) return null;
                     const total = lineTotal(line);
+                    const name = line.customName ?? product?.name ?? 'Item';
+                    const brand = line.customName ? 'Custom Item' : (product?.brand ?? '');
+                    const logo = product ? brandLogos[product.brand] : undefined;
                     return (
                       <div
                         key={line.key}
                         className="flex gap-3 rounded-xl border border-gold/12 bg-midnight/45 p-2.5"
                       >
-                        <ProductArt
-                          product={product}
-                          animated={false}
-                          className="h-16 w-20 shrink-0 rounded-lg"
-                        />
+                        {line.customName ? (
+                          <div className="flex h-16 w-20 shrink-0 flex-col items-center justify-center rounded-lg border border-gold/30 bg-gold/10 p-1 text-gold">
+                            <Sparkles size={18} />
+                            <span className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-gold-soft">Custom</span>
+                          </div>
+                        ) : logo ? (
+                          <div className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-gold/15 bg-white p-1">
+                            <img
+                              src={logo}
+                              alt={`${product?.brand} logo`}
+                              className="h-full w-full object-contain"
+                            />
+                          </div>
+                        ) : product ? (
+                          <ProductArt
+                            product={product}
+                            animated={false}
+                            className="h-16 w-20 shrink-0 rounded-lg"
+                          />
+                        ) : null}
                         <div className="flex min-w-0 flex-1 flex-col gap-1">
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0">
-                              <p className="truncate text-sm font-medium text-cream">{product.name}</p>
+                              <p className="truncate text-sm font-medium text-cream">{name}</p>
                               <p className="text-[10px] text-cream/40">
-                                {product.brand}
+                                {brand}
                                 {line.design ? ` · ${line.design}` : ''}
                               </p>
                             </div>
@@ -105,7 +124,7 @@ export function CartDrawer({
                               type="button"
                               onClick={() => remove(line.key)}
                               className="shrink-0 text-cream/35 transition hover:text-ember"
-                              aria-label={`Remove ${product.name}`}
+                              aria-label={`Remove ${name}`}
                             >
                               <Trash2 size={14} />
                             </button>

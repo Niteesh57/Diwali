@@ -15,7 +15,8 @@ export type CategoryKey =
   | 'roll-caps'
   | 'vanitha'
   | 'toy-guns'
-  | 'exclusive';
+  | 'exclusive'
+  | 'custom';
 
 export type CategoryMeta = {
   key: CategoryKey;
@@ -41,6 +42,7 @@ export const categories: CategoryMeta[] = [
   { key: 'vanitha', label: 'Vanitha Premium', accent: '#fda4af' },
   { key: 'toy-guns', label: 'Toy Guns', accent: '#94a3b8' },
   { key: 'exclusive', label: 'Exclusive 2026', accent: '#f5c451' },
+  { key: 'custom', label: 'Custom', accent: '#f59e0b' },
 ];
 
 export const categoryMap = new Map(categories.map((category) => [category.key, category]));

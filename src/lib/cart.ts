@@ -7,11 +7,14 @@ export type CartLine = {
   productId: string;
   design?: string;
   qty: number;
+  customName?: string;
+  customPrice?: number;
 };
 
 type CartState = {
   lines: CartLine[];
   add: (productId: string, design?: string, qty?: number) => void;
+  addCustom: (name: string, price: number, qty?: number) => void;
   setQty: (key: string, qty: number) => void;
   increment: (key: string) => void;
   decrement: (key: string) => void;
@@ -42,6 +45,32 @@ export const useCart = create<CartState>()(
             };
           }
           return { lines: [...state.lines, { key, productId, design, qty: clampQty(qty) }] };
+        }),
+      addCustom: (name, price, qty = 1) =>
+        set((state) => {
+          const trimmed = name.trim();
+          if (!trimmed || price < 0) return state;
+          const key = `custom::${trimmed.toLowerCase()}::${price}`;
+          const existing = state.lines.find((line) => line.key === key);
+          if (existing) {
+            return {
+              lines: state.lines.map((line) =>
+                line.key === key ? { ...line, qty: clampQty(line.qty + qty) } : line,
+              ),
+            };
+          }
+          return {
+            lines: [
+              ...state.lines,
+              {
+                key,
+                productId: 'custom',
+                customName: trimmed,
+                customPrice: price,
+                qty: clampQty(qty),
+              },
+            ],
+          };
         }),
       setQty: (key, qty) =>
         set((state) => ({
@@ -77,6 +106,7 @@ export const useCart = create<CartState>()(
 );
 
 export const linePrice = (line: CartLine) => {
+  if (typeof line.customPrice === 'number') return line.customPrice;
   const product = productById.get(line.productId);
   return product?.price ?? null;
 };

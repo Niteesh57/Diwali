@@ -83,7 +83,7 @@ export function CheckoutDialog({
     () =>
       lines
         .map((line) => ({ line, product: productById.get(line.productId) }))
-        .filter((entry) => entry.product),
+        .filter((entry) => entry.product || entry.line.customName),
     [lines],
   );
 
@@ -321,13 +321,13 @@ export function CheckoutDialog({
                   </div>
                   <div className="mt-4 max-h-[280px] space-y-2.5 overflow-y-auto pr-1">
                     {orderLines.map(({ line, product }) => {
-                      if (!product) return null;
+                      const name = line.customName ? `${line.customName} (Custom)` : (product?.name ?? 'Item');
                       const total = lineTotal(line);
                       return (
                         <div key={line.key} className="flex items-start justify-between gap-3 text-xs">
                           <div className="min-w-0">
                             <p className="truncate text-cream/85">
-                              {product.name}
+                              {name}
                               {line.design ? ` · ${line.design}` : ''}
                             </p>
                             <p className="text-cream/35">× {line.qty}</p>
